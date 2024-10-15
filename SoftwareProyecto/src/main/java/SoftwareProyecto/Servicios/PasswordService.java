@@ -1,6 +1,7 @@
 package SoftwareProyecto.Servicios;
 
 import SoftwareProyecto.Clases.Password;
+import SoftwareProyecto.Clases.User;
 import SoftwareProyecto.Repositorios.PasswordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -17,10 +19,15 @@ public class PasswordService {
     @Autowired
     private PasswordRepository passwordRepository;
 
-    public PasswordService() {
+    @Autowired
+    public PasswordService(PasswordRepository passwordRepository) {
+        this.passwordRepository = passwordRepository;
     }
 
-    public Collection<Password> findAll() {
+    public List<Password> findAllByUser(User user) {
+        return passwordRepository.findByUser(user);
+    }
+        public Collection<Password> findAll() {
         return passwordRepository.findAll();
     }
     public Page<Password> findAll(Pageable page) {
@@ -32,10 +39,6 @@ public class PasswordService {
     }
 
     public void save(Password password) {
-        if(passwordRepository.findById(password.getId()).isEmpty()) {
-            long id = nextId.getAndIncrement();
-            password.setId(id);
-        }
         passwordRepository.save(password);
     }
 

@@ -9,10 +9,6 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class SoftwareProyectoApplication {
-	@Bean
-	public PasswordService passwordService() {
-		return new PasswordService();
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(SoftwareProyectoApplication.class, args);

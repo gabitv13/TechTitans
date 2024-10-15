@@ -1,9 +1,6 @@
 package SoftwareProyecto.Clases;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Password {
@@ -13,13 +10,17 @@ public class Password {
     private Long id;
     private String website;
     private String password;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
     public Password() {}
 
-    public Password(String website, String password) {
-        super();
+    public Password(String website, String password, User user) {
         this.website = website;
         this.password = password;
+        this.user = user;
     }
 
     public Long getId() {
@@ -44,5 +45,13 @@ public class Password {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
