@@ -1,14 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 <head>
     <title>Gestor de Contraseñas</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<h1>Gestor de contraseñas</h1>
-<form action="/login" method="post">
-    <input type="text" name="username" placeholder="Nombre de usuario" required>
-    <button type="submit">Iniciar</button>
-</form>
+    <header class="header">
+        <div class="logo">
+            <a href="/"> <img src="LogoTechTittans.png" alt="Logo TechTittans"> </a>
+        </div>
+        <nav class="navbar">
+            <a href="/">Home</a>
+            <a href="/passwords">Tus contraseñas</a>
+            <a href="/nextSprint">Cifrar</a>
+            <a href="/nextSprint">Descifrar</a>
+            <a href="/nextSprint">Explorador de archivos</a>
+        </nav>
+    </header>
+    <main class="main-content">
+        <h1>Gestor de Contraseñas</h1>
+        <form action="/login" method="post" class="login-form">
+            <input type="text" name="username" placeholder="Nombre de usuario" required>
+            <button type="submit">Iniciar</button>
+        </form>
+    </main>
 </body>
 </html>
