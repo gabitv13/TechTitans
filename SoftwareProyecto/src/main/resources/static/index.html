@@ -1,30 +1,112 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="es">
 <head>
-    <title>Gestor de Contraseñas</title>
+    <title>TechTitans - Gestor de Contraseñas</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <a href="/"> <img src="LogoTechTittans.png" alt="Logo TechTittans"> </a>
+<header class="header">
+    <div class="logo">
+        <a href="/"> <img src="LogoTechTittans.png" alt="Logo TechTitans"> </a>
+    </div>
+    <nav class="navbar">
+        <a href="/">Home</a>
+        <a href="/passwords">Tus contraseñas</a>
+        <a href="/nextSprint">Cifrar</a>
+        <a href="/nextSprint">Descifrar</a>
+        <a href="/nextSprint">Explorador de archivos</a>
+        <a href="#about">Sobre Nosotros</a>
+        <a href="#team">Equipo</a>
+        <a href="#contact">Contacto</a>
+    </nav>
+    <div class="header-buttons">
+        <button id="login-button" class="btn">Iniciar Sesión</button>
+        <button id="dark-mode-toggle" class="btn">Modo Oscuro</button>
+    </div>
+</header>
+
+<main>
+    <section id="home" class="hero">
+        <h1>TechTitans: Seguridad Digital a tu Alcance</h1>
+        <p>Protege tus datos con nuestro avanzado gestor de contraseñas</p>
+        <a href="/passwords" class="cta-button">Comienza Ahora</a>
+    </section>
+
+    <section id="services" class="services">
+        <h2>Nuestros Servicios</h2>
+        <div class="service-grid">
+            <a href="/passwords" class="service-item">
+                <h3>Gestor de Contraseñas</h3>
+                <p>Almacena y gestiona tus contraseñas de forma segura.</p>
+            </a>
+            <a href="/nextSprint" class="service-item">
+                <h3>Cifrado de Archivos</h3>
+                <p>Protege tus documentos sensibles con cifrado de grado militar.</p>
+            </a>
+            <a href="/nextSprint" class="service-item">
+                <h3>Descifrado de Archivos</h3>
+                <p>Accede a tus archivos cifrados de manera segura.</p>
+            </a>
+            <a href="/nextSprint" class="service-item">
+                <h3>Explorador de Archivos Seguro</h3>
+                <p>Navega por tus archivos con total seguridad y privacidad.</p>
+            </a>
         </div>
-        <nav class="navbar">
-            <a href="/">Home</a>
-            <a href="/passwords">Tus contraseñas</a>
-            <a href="/nextSprint">Cifrar</a>
-            <a href="/nextSprint">Descifrar</a>
-            <a href="/nextSprint">Explorador de archivos</a>
-        </nav>
-    </header>
-    <main class="main-content">
-        <h1>Gestor de Contraseñas</h1>
-        <form action="/login" method="post" class="login-form">
-            <input type="text" name="username" placeholder="Nombre de usuario" required>
-            <button type="submit">Iniciar</button>
+    </section>
+
+    <section id="about" class="about">
+        <h2>Sobre Nosotros</h2>
+        <p>En TechTitans, nos dedicamos a proporcionar soluciones de seguridad digital de vanguardia. Nuestra misión es hacer que la protección de datos sea accesible y fácil para todos.</p>
+    </section>
+
+    <section id="team" class="team">
+        <h2>Nuestro Equipo</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <img src="team-member-1.jpg" alt="Miembro del equipo 1">
+                <h3>Ana García</h3>
+                <p>CEO & Fundadora</p>
+            </div>
+            <div class="team-member">
+                <img src="team-member-2.jpg" alt="Miembro del equipo 2">
+                <h3>Carlos Rodríguez</h3>
+                <p>CTO</p>
+            </div>
+            <div class="team-member">
+                <img src="team-member-3.jpg" alt="Miembro del equipo 3">
+                <h3>Laura Martínez</h3>
+                <p>Jefa de Seguridad</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Contacto</h2>
+        <form action="/contact" method="post" class="contact-form">
+            <input type="text" name="name" placeholder="Tu nombre" required>
+            <input type="email" name="email" placeholder="Tu email" required>
+            <textarea name="message" placeholder="Tu mensaje" required></textarea>
+            <button type="submit">Enviar</button>
         </form>
-    </main>
+    </section>
+</main>
+
+<footer class="footer">
+    <p>&copy; 2024 TechTitans. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+    // JavaScript para el toggle de modo oscuro
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const body = document.body;
+
+    darkModeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        const isDarkMode = body.classList.contains('dark-mode');
+        darkModeToggle.textContent = isDarkMode ? 'Modo Claro' : 'Modo Oscuro';
+    });
+</script>
 </body>
 </html>
