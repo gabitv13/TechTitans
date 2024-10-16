@@ -38,6 +38,12 @@ public class PasswordController {
         return "index.html";
     }
 
+    @GetMapping("/login")
+    public String loginForm(){
+        return "login";
+    }
+
+
     @GetMapping("/logout")
     public String logout() {
         userSession.logout();
