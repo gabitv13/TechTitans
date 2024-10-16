@@ -9,5 +9,14 @@
         <p>Contraseña añadida</p>
         <a href="/passwords">Volver</a>
     </div>
+<script>
+    // Comprobar si el modo oscuro está habilitado en el localStorage
+    document.addEventListener('DOMContentLoaded', () => {
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+    document.body.classList.add('dark-mode');
+    }
+    });
+</script>
 </body>
 </html>

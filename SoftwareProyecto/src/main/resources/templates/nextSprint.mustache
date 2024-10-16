@@ -12,5 +12,14 @@
     <p>Esta opción estará disponible en el próximo sprint. ¡Mantente atento!</p>
     <a href="/" class="button">Volver al inicio</a>
 </div>
+<script>
+    // Comprobar si el modo oscuro está habilitado en el localStorage
+    document.addEventListener('DOMContentLoaded', () => {
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+        }
+    });
+</script>
 </body>
 </html>
