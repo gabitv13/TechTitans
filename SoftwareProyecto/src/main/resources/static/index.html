@@ -27,40 +27,39 @@
 </header>
 
 <main>
-    <section id="home" class="hero">
+    <section id="home" class="hero section hidden">
         <h1>TechTitans: Seguridad Digital a tu Alcance</h1>
         <p>Protege tus datos con nuestro avanzado gestor de contraseñas</p>
         <a href="/passwords" class="cta-button">Comienza Ahora</a>
     </section>
 
     <section id="services" class="services">
-        <h2>Nuestros Servicios</h2>
+        <h2 class="section hidden">Nuestros Servicios</h2>
         <div class="service-grid">
-            <a href="/passwords" class="service-item">
+            <a href="/passwords" class="service-item section hidden">
                 <h3>Gestor de Contraseñas</h3>
                 <p>Almacena y gestiona tus contraseñas de forma segura.</p>
             </a>
-            <a href="/nextSprint" class="service-item">
+            <a href="/nextSprint" class="service-item section hidden">
                 <h3>Cifrado de Archivos</h3>
                 <p>Protege tus documentos sensibles con cifrado de grado militar.</p>
             </a>
-            <a href="/nextSprint" class="service-item">
+            <a href="/nextSprint" class="service-item section hidden">
                 <h3>Descifrado de Archivos</h3>
                 <p>Accede a tus archivos cifrados de manera segura.</p>
             </a>
-            <a href="/nextSprint" class="service-item">
+            <a href="/nextSprint" class="service-item section hidden">
                 <h3>Explorador de Archivos Seguro</h3>
                 <p>Navega por tus archivos con total seguridad y privacidad.</p>
             </a>
         </div>
     </section>
-
-    <section id="about" class="about">
+    <section id="about" class="about section hidden">
         <h2>Sobre Nosotros</h2>
         <p>En TechTitans, nos dedicamos a proporcionar soluciones de seguridad digital de vanguardia. Nuestra misión es hacer que la protección de datos sea accesible y fácil para todos.</p>
     </section>
 
-    <section id="team" class="team">
+    <section id="team" class="team section hidden">
         <h2>Nuestro Equipo</h2>
         <div class="team-grid">
             <div class="team-member">
@@ -71,7 +70,7 @@
             <div class="team-member">
                 <img src="team-member-2.jpg" alt="Tech Titans Team">
                 <h3>Sergio Morales Bascuñana</h3>
-                <p>CTO</p>
+                <p>Scrum Master</p>
             </div>
             <div class="team-member">
                 <img src="team-member-3.jpg" alt="Tech Titans Team">
@@ -90,7 +89,7 @@
             </div>
             <div class="team-member">
                 <img src="team-member-3.jpg" alt="Tech Titans Team">
-                <h3>Mario Martín-Arriscado Santos</h3>
+                <h3>Mario Martín Arriscado Santos</h3>
                 <p>DEV</p>
             </div>
             <div class="team-member">
@@ -101,7 +100,7 @@
         </div>
     </section>
 
-    <section id="contact" class="contact">
+    <section id="contact" class="contact section hidden">
         <h2>Contacto</h2>
         <form action="/contact" method="post" class="contact-form">
             <input type="text" name="name" placeholder="Tu nombre" required>
@@ -115,14 +114,42 @@
 <footer class="footer">
     <p>&copy; 2024 TechTitans. Todos los derechos reservados.</p>
 </footer>
-
 <script>
-    // JavaScript para el toggle de modo oscuro
+    // Código existente para modo oscuro
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     const body = document.body;
 
     darkModeToggle.addEventListener('change', () => {
         body.classList.toggle('dark-mode');
+    });
+
+    // Código existente para animaciones
+    const sections = document.querySelectorAll('.section');
+
+    function checkVisibility() {
+        sections.forEach(section => {
+            const sectionTop = section.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+
+            if (sectionTop < windowHeight - 100) {
+                section.classList.add('visible');
+            } else {
+                section.classList.remove('visible');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', checkVisibility);
+    checkVisibility();
+
+    // Código para manejar enlaces activos
+    const navLinks = document.querySelectorAll('.navbar a');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.forEach(nav => nav.classList.remove('active')); // Quitar 'active' de todos
+            link.classList.add('active'); // Añadir 'active' al clickeado
+        });
     });
 </script>
 </body>
