@@ -53,7 +53,7 @@ public class PasswordController {
     @GetMapping("/passwords")
     public String listPasswords(Model model) {
         if (!userSession.isLoggedIn()) {
-            return "redirect:/";
+            return "redirect:/login";
         }
         User user = userSession.getCurrentUser();
         model.addAttribute("username", user.getUsername());
@@ -113,5 +113,9 @@ public class PasswordController {
         password.setPassword(newPassword);
         passwordService.save(password);
         return "redirect:/passwords";
+    }
+    @PostMapping("/contact")
+    public String contact(Model model) {
+        return "emailSended";
     }
 }
