@@ -65,8 +65,9 @@ public class PasswordController {
         if (!userSession.isLoggedIn()) {
             return "redirect:/";
         }
-        return "addPassword";
+    return "addPassword";
     }
+
     @GetMapping("/passwords/update")
     public String updatePasswordForm(Model model) {
         if (!userSession.isLoggedIn()) {
