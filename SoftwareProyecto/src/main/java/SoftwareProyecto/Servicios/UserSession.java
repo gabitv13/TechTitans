@@ -14,7 +14,7 @@ public class UserSession {
     }
 
     public void login(User user) {
-        httpSession.setAttribute("currentUser", user);  // Guardar objeto User completo
+        httpSession.setAttribute("currentUser", user);
     }
 
     public User getCurrentUser() {
