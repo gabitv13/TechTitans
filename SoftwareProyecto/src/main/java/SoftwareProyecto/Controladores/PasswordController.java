@@ -26,7 +26,7 @@ public class PasswordController {
 
     @PostConstruct
     public void def(){
-        User user = new User("user1");
+        User user = new User("user1", "1");
         userRepository.save(user);
         passwordRepository.save(new Password("gmail.com", "123", user));
         passwordRepository.save(new Password("uber", "234", user));

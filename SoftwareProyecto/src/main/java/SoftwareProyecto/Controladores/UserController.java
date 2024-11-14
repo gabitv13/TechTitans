@@ -6,11 +6,10 @@ import SoftwareProyecto.Servicios.UserService;
 import SoftwareProyecto.Servicios.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.ui.Model;
 
 import java.util.Optional;
 
@@ -22,37 +21,39 @@ public class UserController {
 
     @Autowired
     private UserSession userSession;
+
     @Autowired
     private PasswordService passwordService;
 
     @PostMapping("/login")
-    public String login(@RequestParam String username) {
+    public String login(@RequestParam String username, @RequestParam String password, Model model) {
         Optional<User> userOptional = userService.findByUsername(username);
-        User user;
-        if (userOptional.isPresent()) {
-            user = userOptional.get();
+
+        if (userOptional.isPresent() && userService.checkPassword(userOptional.get(), password)) {
+            userSession.login(userOptional.get());
+            return "redirect:/passwords"; // Redirige a la página de passwords si el login es exitoso
         } else {
-            user = userService.createUser(username);
+            model.addAttribute("message", "Nombre de usuario o contraseña incorrecta.");
+            return "login"; // Redirige de nuevo al login si falla la autenticación
         }
-
-        userSession.login(user);
-
-        return "redirect:/passwords";
     }
+
     @PostMapping("/register")
     public String registerUser(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
         Optional<User> existingUser = userService.findByUsername(username);
         if (existingUser.isPresent()) {
             model.addAttribute("message", "El usuario ya existe.");
-            return "safePassword"; // Redirige de nuevo a la misma página si el usuario existe
+            return "safePassword";
         }
-        // De lo contrario, el registro es exitoso, redirige a otra página
-        return "prueba"; // Redirige a "prueba" tras un registro exitoso
+
+        // Crear y guardar un nuevo usuario con el nombre y la contraseña proporcionados
+        User newUser = userService.createUser(username, password);
+        userSession.login(newUser);  // Inicia sesión automáticamente tras el registro
+        return "redirect:/passwords";
     }
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        return "safePassword"; //
+        return "safePassword";
     }
-
 }
