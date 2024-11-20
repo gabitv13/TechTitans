@@ -33,7 +33,7 @@ public class UserController {
             userSession.login(userOptional.get());
             return "redirect:/passwords"; // Redirige a la página de passwords si el login es exitoso
         } else {
-            model.addAttribute("message", "Nombre de usuario o contraseña incorrecta.");
+            model.addAttribute("ErrorMessage", "Nombre de usuario o contraseña incorrecta.");
             return "login"; // Redirige de nuevo al login si falla la autenticación
         }
     }
@@ -42,7 +42,7 @@ public class UserController {
     public String registerUser(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
         Optional<User> existingUser = userService.findByUsername(username);
         if (existingUser.isPresent()) {
-            model.addAttribute("message", "El usuario ya existe.");
+            model.addAttribute("errorMessage", "El usuario ya existe.");
             return "safePassword";
         }
 

@@ -9,6 +9,13 @@
 <body>
 <div class="login-container">
     <h1>Iniciar Sesión</h1>
+    {{#ErrorMessage}}
+        <div class="alert">
+            <script>
+                alert("{{ErrorMessage}}");
+            </script>
+        </div>
+    {{/ErrorMessage}}
     <form action="/login" method="post">
         <label for="username">Nombre de usuario:</label>
         <input type="text" id="username" name="username" required>
@@ -22,7 +29,6 @@
     <a href="/register">Registrarse</a>
 </div>
 <script>
-    // Comprobar si el modo oscuro está habilitado en el localStorage
     document.addEventListener('DOMContentLoaded', () => {
         const isDarkMode = localStorage.getItem('darkMode') === 'true';
         if (isDarkMode) {
