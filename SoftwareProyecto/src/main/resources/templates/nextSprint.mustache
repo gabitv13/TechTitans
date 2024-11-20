@@ -15,10 +15,15 @@
 <script>
     // Comprobar si el modo oscuro está habilitado en el localStorage
     document.addEventListener('DOMContentLoaded', () => {
+        applyDarkMode();
+    });
+
+    function applyDarkMode() {
         const isDarkMode = localStorage.getItem('darkMode') === 'true';
         if (isDarkMode) {
             document.body.classList.add('dark-mode');
         }
+    }
     });
 </script>
 </body>
