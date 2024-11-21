@@ -56,4 +56,9 @@ public class UserController {
     public String showRegistrationForm(Model model) {
         return "safePassword";
     }
+
+    @GetMapping("/encriptar")
+    public String showEncryptForm(Model model){
+        return "encriptado/encrypt";
+    }
 }
