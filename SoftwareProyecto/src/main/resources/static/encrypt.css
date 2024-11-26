@@ -133,3 +133,45 @@ textarea {
         font-size: 1.5rem;
     }
 }
+
+.botones-accion {
+    display: flex;
+    flex-wrap: wrap; /* Permitir que los botones se distribuyan en varias filas si es necesario */
+    justify-content: center;
+    gap: 1rem; /* Añade separación entre los botones */
+}
+
+/* Estilo general para los botones */
+.btn-encriptar,
+.btn-desencriptar {
+    padding: 1rem;
+    background-color: #0a3871;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0.5rem; /* Separación adicional */
+}
+
+.btn-encriptar:hover {
+    background-color: #064f91; /* Color más oscuro al pasar el ratón */
+}
+
+.btn-desencriptar {
+    background-color: #d8dfe8;
+    color: #0a3871;
+}
+
+.btn-desencriptar:hover {
+    background-color: #b0c6db; /* Color más oscuro al pasar el ratón */
+}
+
+/* Asegúrate de que los botones personalizados tengan un estilo coherente */
+#btn-encriptar-mio {
+    background-color: #f39c12; /* Un color distintivo */
+}
+
+#btn-encriptar-mio:hover {
+    background-color: #e67e22; /* Oscurecer al pasar el ratón */
+}
