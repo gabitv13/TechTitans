@@ -6,242 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Encriptador de Texto</title>
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" />
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            background: #f3f5fc;
-        }
-
-        .texto {
-            position: absolute;
-            width: 42%;
-            height: 60%;
-            left: 12%;
-            top: 15%;
-            border: none;
-            font-family: "Inter";
-            font-style: normal;
-            font-weight: 400;
-            font-size: 32px;
-            line-height: 150%;
-            background-color: #f3f5fc;
-        }
-
-        .texto::placeholder {
-            color: #0a3871;
-        }
-
-        .texto:focus,
-        .texto:active {
-            border: none;
-            outline: none;
-        }
-
-        .terminos {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            padding: 0px;
-            gap: 8px;
-            position: absolute;
-            width: 80%;
-            left: 12%;
-            top: 80%;
-        }
-
-        .terminos p {
-            font-family: "Inter";
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 150%;
-            color: #495057;
-            opacity: 0.8;
-            flex: none;
-            order: 1;
-            flex-grow: 0;
-        }
-
-        .botones {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            padding: 1% 0;
-            position: absolute;
-            width: 80%;
-            left: 12%;
-            top: 82%;
-        }
-
-        .btn-encriptar {
-            align-items: center;
-            justify-content: center;
-            padding: 2%;
-            gap: 8px;
-            width: 25%;
-            background-color: #0a3871;
-            border-radius: 24px;
-            font-family: "Inter";
-            font-size: 18px;
-            line-height: 19px;
-            text-align: center;
-            color: #fff;
-        }
-
-        .btn-desencriptar {
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 2%;
-            gap: 8px;
-            width: 25%;
-            background: #d8dfe8;
-            border: 1px solid #0a3871;
-            border-radius: 24px;
-            font-family: "Inter";
-            font-weight: 400;
-            font-size: 18px;
-            line-height: 19px;
-            text-align: center;
-            color: #0a3871;
-        }
-
-        .btn-desencriptar:hover,
-        .btn-encriptar:hover {
-            margin: 0.3%;
-            width: 24.5%;
-            padding: 1.8%;
-        }
-
-        .encriptado {
-            display: flex;
-            justify-content: center;
-            position: absolute;
-            width: 30%;
-            height: 90%;
-            left: 60%;
-            top: 5%;
-            background: #fff;
-            box-shadow: 0px 24px 32px -8px rgba(0, 0, 0, 0.08);
-            border-radius: 32px;
-        }
-
-        .mensaje-encriptado {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1%;
-            gap: 16px;
-            position: absolute;
-            width: 100%;
-            top: 65%;
-            text-align: center;
-        }
-
-        .mensaje-encriptado h2 {
-            width: 60%;
-            font-family: "Inter";
-            font-style: normal;
-            font-weight: 700;
-            font-size: 24px;
-            line-height: 120%;
-            text-align: center;
-            color: #343a40;
-        }
-
-        .mensaje-encriptado p {
-            width: 80%;
-            font-family: "Inter";
-            font-style: normal;
-            font-weight: 400;
-            font-size: 16px;
-            line-height: 150%;
-            text-align: center;
-            color: #495057;
-        }
-
-        /* Responsive design */
-        @media (max-width: 57.5em) {
-            .container {
-                display: inline;
-                flex-direction: row;
-            }
-            .encriptar {
-                width: 100%;
-            }
-            .texto {
-                width: 80%;
-                height: 60%;
-                left: 10%;
-                top: 5%;
-            }
-            .terminos {
-                width: 80%;
-                right: 20%;
-                top: 67%;
-            }
-            .terminos p {
-                font-size: 16px;
-            }
-            .botones {
-                width: 80%;
-                left: 10%;
-                top: 70%;
-            }
-            .btn-encriptar,
-            .btn-desencriptar {
-                width: 48%;
-                border-radius: 16px;
-            }
-            .btn-encriptar:hover,
-            .btn-desencriptar:hover {
-                margin: 0.3%;
-                width: 47.5%;
-                padding: 1.8%;
-            }
-            .encriptado {
-                width: 80%;
-                height: 15%;
-                left: 10%;
-                top: 80%;
-            }
-            .mensaje-encriptado {
-                width: 100%;
-                top: 5%;
-            }
-        }
-    </style>
-    <script>
-        function encriptar() {
-            let texto = document.getElementById("textoEncriptar").value;
-            let textoCifrado = texto
-                    .replace(/e/gi, "tech")
-                    .replace(/i/gi, "titans")
-                    .replace(/a/gi, "ai")
-                    .replace(/o/gi, "fed")
-                    .replace(/u/gi, "igs");
-
-            if (document.getElementById("textoEncriptar").value !== 0) {
-                document.getElementById("textoEncriptar").value = textoCifrado;
-                document.getElementById("titulo-mensaje").textContent = "Texto encriptado con éxito";
-                document.getElementById("parrafo").textContent = "";
-            } else {
-                tituloMensaje.textContent = "Ningún mensaje fue encontrado";
-                parrafo.textContent = "Ingresa el texto que deseas encriptar o desencriptar";
-                swal("Ooops!", "Debes ingresar un texto", "warning");
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="/encrypt.css">
 </head>
 <body>
 <div class="container">
@@ -279,5 +44,52 @@
         </div>
     </div>
 </div>
+<script>
+    function encriptar() {
+        let texto = document.getElementById("textoEncriptar").value;
+
+        // Check if text is empty
+        if (texto.trim() === "") {
+            document.getElementById("titulo-mensaje").textContent = "Ningún mensaje fue encontrado";
+            document.getElementById("parrafo").textContent = "Ingresa el texto que deseas encriptar o desencriptar";
+            return;
+        }
+
+        // Encrypt the text
+        let textoCifrado = texto
+                .replace(/e/gi, "tech")
+                .replace(/i/gi, "titans")
+                .replace(/a/gi, "ai")
+                .replace(/o/gi, "fed")
+                .replace(/u/gi, "igs");
+
+        // Update the result area
+        document.getElementById("titulo-mensaje").textContent = "Texto encriptado con éxito";
+        document.getElementById("parrafo").textContent = textoCifrado;
+    }
+
+    function desencriptar() {
+        let texto = document.getElementById("textoEncriptar").value;
+
+        // Check if text is empty
+        if (texto.trim() === "") {
+            document.getElementById("titulo-mensaje").textContent = "Ningún mensaje fue encontrado";
+            document.getElementById("parrafo").textContent = "Ingresa el texto que deseas encriptar o desencriptar";
+            return;
+        }
+
+        // Decrypt the text
+        let textoDescifrado = texto
+                .replace(/tech/gi, "e")
+                .replace(/titans/gi, "i")
+                .replace(/ai/gi, "a")
+                .replace(/fed/gi, "o")
+                .replace(/igs/gi, "u");
+
+        // Update the result area
+        document.getElementById("titulo-mensaje").textContent = "Texto desencriptado con éxito";
+        document.getElementById("parrafo").textContent = textoDescifrado;
+    }
+</script>
 </body>
 </html>
