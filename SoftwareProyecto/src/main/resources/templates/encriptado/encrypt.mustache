@@ -130,7 +130,15 @@
         return textoCifrado;
     }
 
-        // Desencriptar con AES
+        function encriptarAES(texto, clave) {
+            const claveAjustada = ajustarClave(clave, 16); // AES-128 usa 16 bytes
+            const textoCifrado = CryptoJS.AES.encrypt(texto, claveAjustada, {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7,
+            }).toString();
+            return textoCifrado; // Devuelve en Base64
+        }
+
         function desencriptarAES(textoCifrado, clave) {
             try {
                 const claveAjustada = ajustarClave(clave, 16); // AES-128 usa 16 bytes
@@ -142,39 +150,21 @@
                 if (!textoDescifrado) throw new Error("Texto no válido");
                 return textoDescifrado;
             } catch (error) {
-                console.error("Error en AES:", error);
-                return null;
-            }
-        }
-
-        function desencriptarDES(textoCifrado, clave) {
-            try {
-                const claveAjustada = ajustarClave(clave, 8); // DES usa 8 bytes
-                const bytes = CryptoJS.DES.decrypt(textoCifrado, claveAjustada, {
-                    mode: CryptoJS.mode.ECB,
-                    padding: CryptoJS.pad.Pkcs7,
-                });
-                const textoDescifrado = bytes.toString(CryptoJS.enc.Utf8);
-                if (!textoDescifrado) throw new Error("Texto no válido");
-                return textoDescifrado;
-            } catch (error) {
-                console.error("Error en DES:", error);
+                console.error("Error en desencriptar AES:", error);
                 return null;
             }
         }
 
 
-        // Encriptar con DES
         function encriptarDES(texto, clave) {
-        const claveUtf8 = CryptoJS.enc.Utf8.parse(clave);
-        const textoCifrado = CryptoJS.DES.encrypt(texto, claveUtf8, {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7,
-    }).toString();
-        return textoCifrado;
-    }
+            const claveAjustada = ajustarClave(clave, 8); // DES usa 8 bytes
+            const textoCifrado = CryptoJS.DES.encrypt(texto, claveAjustada, {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7,
+            }).toString();
+            return textoCifrado; // Devuelve en Base64
+        }
 
-        // Desencriptar con DES
         function desencriptarDES(textoCifrado, clave) {
             try {
                 const claveAjustada = ajustarClave(clave, 8); // DES usa 8 bytes
@@ -186,10 +176,11 @@
                 if (!textoDescifrado) throw new Error("Texto no válido");
                 return textoDescifrado;
             } catch (error) {
-                console.error("Error en DES:", error);
+                console.error("Error en desencriptar DES:", error);
                 return null;
             }
         }
+
 
         // Manejo de eventos para botones
         document.getElementById("btn-personalizado-encriptar").addEventListener("click", encriptar);
