@@ -10,37 +10,62 @@
 </head>
 <body>
 <div class="container">
-    <div class="encriptar">
-        <textarea
-                name="textoEncriptar"
-                class="textoEncriptar"
-                id="textoEncriptar"
-                cols="30"
-                rows="10"
-                placeholder="Ingresa el texto aquí"
-        ></textarea>
-
-        <div class="terminos">
-            <p>Solo letras minúsculas y sin acentos.</p>
+    <div class="titulo-principal">
+        <h1>Encriptador de Texto</h1>
+    </div>
+    <div class="seccion-encriptar">
+        <div class="titulo-seccion">
+            <h2>Encriptar</h2>
         </div>
-        <div class="botones">
-            <button class="btn-encriptar" type="button" onclick="encriptar()">
-                Encriptar
-            </button>
-            <input
-                    type="button"
-                    class="btn-desencriptar"
-                    value="Desencriptar"
-                    onclick="desencriptar()"
-            />
+        <div class="contenido-encriptar">
+                <textarea
+                        id="textoEncriptar"
+                        placeholder="Texto a encriptar"
+                ></textarea>
+            <div class="terminos">
+                <p>Solo letras minúsculas y sin acentos</p>
+            </div>
+            <div class="botones-accion">
+                <button onclick="encriptar()" class="btn-encriptar">
+                    Encriptar
+                </button>
+            </div>
+            <div class="resultado">
+                <p id="resultado-encriptar">Resultado de encriptación</p>
+            </div>
+            <div class="botones-accion">
+                <button onclick="copiarEncriptado()" class="btn-copiar">
+                    Copiar
+                </button>
+            </div>
         </div>
     </div>
-    <div class="encriptado">
-        <div class="mensaje-encriptado" id="mensaje-encriptado">
-            <h2 id="titulo-mensaje">Ningún mensaje fue encontrado</h2>
-            <p id="parrafo">
-                Ingresa el texto que deseas encriptar o desencriptar
-            </p>
+
+    <div class="seccion-desencriptar">
+        <div class="titulo-seccion">
+            <h2>Desencriptar</h2>
+        </div>
+        <div class="contenido-desencriptar">
+                <textarea
+                        id="textoDesencriptar"
+                        placeholder="Texto a desencriptar"
+                ></textarea>
+            <div class="terminos">
+                <p>Solo letras minúsculas y sin acentos</p>
+            </div>
+            <div class="botones-accion">
+                <button onclick="desencriptar()" class="btn-desencriptar">
+                    Desencriptar
+                </button>
+            </div>
+            <div class="resultado">
+                <p id="resultado-desencriptar">Resultado de desencriptación</p>
+            </div>
+            <div class="botones-accion">
+                <button onclick="copiarDesencriptado()" class="btn-copiar">
+                    Copiar
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -48,47 +73,76 @@
     function encriptar() {
         let texto = document.getElementById("textoEncriptar").value;
 
-        // Check if text is empty
+        // Validar que el texto no esté vacío
         if (texto.trim() === "") {
-            document.getElementById("titulo-mensaje").textContent = "Ningún mensaje fue encontrado";
-            document.getElementById("parrafo").textContent = "Ingresa el texto que deseas encriptar o desencriptar";
+            document.getElementById("resultado-encriptar").textContent = "Ingresa texto para encriptar";
             return;
         }
 
-        // Encrypt the text
-        let textoCifrado = texto
-                .replace(/e/gi, "tech")
-                .replace(/i/gi, "titans")
-                .replace(/a/gi, "ai")
-                .replace(/o/gi, "fed")
-                .replace(/u/gi, "igs");
+        // Validar que solo contenga letras minúsculas sin acentos
+        if (!/^[a-z\s]+$/.test(texto)) {
+            document.getElementById("resultado-encriptar").textContent = "Solo se permiten letras minúsculas sin acentos";
+            return;
+        }
 
-        // Update the result area
-        document.getElementById("titulo-mensaje").textContent = "Texto encriptado con éxito";
-        document.getElementById("parrafo").textContent = textoCifrado;
+        // Método de encriptación
+        let textoCifrado = texto
+                .replace(/e/g, "enter")
+                .replace(/i/g, "imes")
+                .replace(/a/g, "ai")
+                .replace(/o/g, "ober")
+                .replace(/u/g, "ufat");
+
+        // Mostrar resultado
+        document.getElementById("resultado-encriptar").textContent = textoCifrado;
     }
 
     function desencriptar() {
-        let texto = document.getElementById("textoEncriptar").value;
+        let texto = document.getElementById("textoDesencriptar").value;
 
-        // Check if text is empty
+        // Validar que el texto no esté vacío
         if (texto.trim() === "") {
-            document.getElementById("titulo-mensaje").textContent = "Ningún mensaje fue encontrado";
-            document.getElementById("parrafo").textContent = "Ingresa el texto que deseas encriptar o desencriptar";
+            document.getElementById("resultado-desencriptar").textContent = "Ingresa texto para desencriptar";
             return;
         }
 
-        // Decrypt the text
+        // Método de desencriptación
         let textoDescifrado = texto
-                .replace(/tech/gi, "e")
-                .replace(/titans/gi, "i")
-                .replace(/ai/gi, "a")
-                .replace(/fed/gi, "o")
-                .replace(/igs/gi, "u");
+                .replace(/enter/g, "e")
+                .replace(/imes/g, "i")
+                .replace(/ai/g, "a")
+                .replace(/ober/g, "o")
+                .replace(/ufat/g, "u");
 
-        // Update the result area
-        document.getElementById("titulo-mensaje").textContent = "Texto desencriptado con éxito";
-        document.getElementById("parrafo").textContent = textoDescifrado;
+        // Mostrar resultado
+        document.getElementById("resultado-desencriptar").textContent = textoDescifrado;
+    }
+
+    // Función para copiar al portapapeles
+    function copiarEncriptado() {
+        let texto = document.getElementById("resultado-encriptar").textContent;
+
+        // Evitar copiar el mensaje por defecto
+        if (texto !== "Resultado de encriptación" && texto !== "Ingresa texto para encriptar") {
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("Texto copiado al portapapeles");
+            }).catch(err => {
+                console.error('Error al copiar el texto: ', err);
+            });
+        }
+    }
+
+    function copiarDesencriptado() {
+        let texto = document.getElementById("resultado-desencriptar").textContent;
+
+        // Evitar copiar el mensaje por defecto
+        if (texto !== "Resultado de desencriptación" && texto !== "Ingresa texto para desencriptar") {
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("Texto copiado al portapapeles");
+            }).catch(err => {
+                console.error('Error al copiar el texto: ', err);
+            });
+        }
     }
 </script>
 </body>
