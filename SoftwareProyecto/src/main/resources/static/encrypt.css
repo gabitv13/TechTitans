@@ -12,6 +12,13 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 2rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
 }
 
 .container {
@@ -24,6 +31,12 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+body.dark-mode .container {
+    background-color: #1e1e1e;
+    box-shadow: 0 10px 30px rgba(255,255,255,0.1);
 }
 
 .titulo-principal {
@@ -33,17 +46,11 @@ body {
     color: white;
     padding: 1rem;
     border-radius: 10px;
+    transition: background-color 0.3s;
 }
 
-.titulo-principal h1 {
-    font-size: 2rem;
-}
-
-.seccion-encriptar,
-.seccion-desencriptar {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+body.dark-mode .titulo-principal {
+    background-color: #1565c0;
 }
 
 .titulo-seccion {
@@ -52,13 +59,12 @@ body {
     padding: 0.5rem;
     text-align: center;
     border-radius: 10px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.contenido-encriptar,
-.contenido-desencriptar {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+body.dark-mode .titulo-seccion {
+    background-color: #37474f;
+    color: #64b5f6;
 }
 
 textarea {
@@ -69,17 +75,33 @@ textarea {
     border-radius: 10px;
     resize: none;
     font-size: 1rem;
+    background-color: white;
+    color: black;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body.dark-mode textarea {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    border-color: #1565c0;
 }
 
 .terminos {
     text-align: center;
     color: #495057;
     font-size: 0.8rem;
+    transition: color 0.3s;
+}
+
+body.dark-mode .terminos {
+    color: #b0b0b0;
 }
 
 .botones-accion {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    gap: 1rem;
 }
 
 .btn-encriptar,
@@ -91,17 +113,32 @@ textarea {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, opacity 0.3s;
     margin: 0 0.5rem;
+}
+
+body.dark-mode .btn-encriptar {
+    background-color: #1565c0;
 }
 
 .btn-desencriptar {
     background-color: #d8dfe8;
     color: #0a3871;
+    transition: background-color 0.3s ease, opacity 0.3s;
+}
+
+body.dark-mode .btn-desencriptar {
+    background-color: #37474f;
+    color: #64b5f6;
 }
 
 .btn-copiar {
     background-color: #2ecc71;
+    transition: background-color 0.3s ease, opacity 0.3s;
+}
+
+body.dark-mode .btn-copiar {
+    background-color: #27ae60;
 }
 
 .btn-encriptar:hover,
@@ -122,6 +159,13 @@ textarea {
     justify-content: center;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .resultado {
+    background-color: #2c2c2c;
+    border-color: #1565c0;
+    color: #e0e0e0;
 }
 
 @media (max-width: 768px) {
@@ -134,44 +178,20 @@ textarea {
     }
 }
 
-.botones-accion {
-    display: flex;
-    flex-wrap: wrap; /* Permitir que los botones se distribuyan en varias filas si es necesario */
-    justify-content: center;
-    gap: 1rem; /* Añade separación entre los botones */
-}
-
-/* Estilo general para los botones */
-.btn-encriptar,
-.btn-desencriptar {
-    padding: 1rem;
-    background-color: #0a3871;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin: 0.5rem; /* Separación adicional */
-}
-
-.btn-encriptar:hover {
-    background-color: #064f91; /* Color más oscuro al pasar el ratón */
-}
-
-.btn-desencriptar {
-    background-color: #d8dfe8;
-    color: #0a3871;
-}
-
-.btn-desencriptar:hover {
-    background-color: #b0c6db; /* Color más oscuro al pasar el ratón */
-}
-
-/* Asegúrate de que los botones personalizados tengan un estilo coherente */
+/* Custom button styles */
 #btn-encriptar-mio {
-    background-color: #f39c12; /* Un color distintivo */
+    background-color: #f39c12;
+    transition: background-color 0.3s ease;
 }
 
 #btn-encriptar-mio:hover {
-    background-color: #e67e22; /* Oscurecer al pasar el ratón */
+    background-color: #e67e22;
+}
+
+body.dark-mode #btn-encriptar-mio {
+    background-color: #d35400;
+}
+
+body.dark-mode #btn-encriptar-mio:hover {
+    background-color: #e67e22;
 }

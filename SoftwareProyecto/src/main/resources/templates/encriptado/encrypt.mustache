@@ -25,6 +25,7 @@
         <!-- Botones de cifrado -->
         <div class="botones-accion">
             <button id="btn-personalizado-encriptar" class="btn-encriptar">Encriptar Personalizado</button>
+            <button id="btn-cesar-encriptar" class="btn-encriptar">Encriptar César</button>
             <button id="btn-aes-encriptar" class="btn-encriptar">Encriptar AES</button>
             <button id="btn-des-encriptar" class="btn-encriptar">Encriptar DES</button>
         </div>
@@ -51,6 +52,7 @@
         <!-- Botones de descifrado -->
         <div class="botones-accion">
             <button id="btn-personalizado-desencriptar" class="btn-desencriptar">Desencriptar Personalizado</button>
+            <button id="btn-cesar-desencriptar" class="btn-desencriptar">Desencriptar César</button>
             <button id="btn-aes-desencriptar" class="btn-desencriptar">Desencriptar AES</button>
             <button id="btn-des-desencriptar" class="btn-desencriptar">Desencriptar DES</button>
         </div>
@@ -70,6 +72,23 @@
 
 
 <script>
+
+    // Comprobar si el modo oscuro está habilitado en el localStorage
+    document.addEventListener('DOMContentLoaded', () => {
+        applyDarkMode();
+
+        // Añadir event listener para el botón de modo oscuro
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+    });
+
+    function applyDarkMode() {
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+        }
+    }
+
     // Función para generar un hash simple de la clave
     function generarHashClave(clave) {
         return [...clave].reduce((hash, char) => (hash * 31 + char.charCodeAt(0)) % 1e9, 7); // Genera un número pseudo-único
@@ -149,6 +168,59 @@
         document.getElementById("resultado-desencriptar").textContent = textoDescifrado;
     }
 
+    //Cesar
+    function encriptarCesar() {
+        let texto = document.getElementById("textoEncriptar").value;
+
+        if (texto.trim() === "") {
+            document.getElementById("resultado-encriptar").textContent = "Ingresa texto para encriptar";
+            return;
+        }
+
+        if (!/^[a-z\s]+$/.test(texto)) {
+            document.getElementById("resultado-encriptar").textContent = "Solo se permiten letras minúsculas sin acentos";
+            return;
+        }
+
+        const desplazamiento = parseInt(prompt("Introduce el desplazamiento (1-25):"), 10);
+
+        if (isNaN(desplazamiento) || desplazamiento < 1 || desplazamiento > 25) {
+            document.getElementById("resultado-encriptar").textContent = "Desplazamiento inválido. Debe ser un número entre 1 y 25.";
+            return;
+        }
+
+        const textoCifrado = texto.split("").map(char => {
+            if (char === " ") return " "; // No modifica espacios
+            const code = char.charCodeAt(0);
+            return String.fromCharCode(((code - 97 + desplazamiento) % 26) + 97);
+        }).join("");
+
+        document.getElementById("resultado-encriptar").textContent = textoCifrado;
+    }
+
+    function desencriptarCesar() {
+        let texto = document.getElementById("textoDesencriptar").value;
+
+        if (texto.trim() === "") {
+            document.getElementById("resultado-desencriptar").textContent = "Ingresa texto para desencriptar";
+            return;
+        }
+
+        const desplazamiento = parseInt(prompt("Introduce el desplazamiento (1-25):"), 10);
+
+        if (isNaN(desplazamiento) || desplazamiento < 1 || desplazamiento > 25) {
+            document.getElementById("resultado-desencriptar").textContent = "Desplazamiento inválido. Debe ser un número entre 1 y 25.";
+            return;
+        }
+
+        const textoDescifrado = texto.split("").map(char => {
+            if (char === " ") return " "; // No modifica espacios
+            const code = char.charCodeAt(0);
+            return String.fromCharCode(((code - 97 - desplazamiento + 26) % 26) + 97);
+        }).join("");
+
+        document.getElementById("resultado-desencriptar").textContent = textoDescifrado;
+    }
 
     // AES
     function encriptarAES(texto, clave) {
@@ -191,6 +263,10 @@
     // Asignar eventos
     document.getElementById("btn-personalizado-encriptar").addEventListener("click", encriptar);
     document.getElementById("btn-personalizado-desencriptar").addEventListener("click", desencriptar);
+
+    document.getElementById("btn-cesar-encriptar").addEventListener("click", encriptarCesar);
+    document.getElementById("btn-cesar-desencriptar").addEventListener("click", desencriptarCesar);
+
 
     document.getElementById("btn-aes-encriptar").addEventListener("click", () => {
         const texto = document.getElementById("textoEncriptar").value;
