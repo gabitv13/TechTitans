@@ -70,9 +70,9 @@
 
 
 <script>
-    // Función para ajustar clave al tamaño requerido
-    function ajustarClave(clave, tamaño) {
-        return clave.padEnd(tamaño, '0').substring(0, tamaño); // Extiende o recorta
+    // Función para generar un hash simple de la clave
+    function generarHashClave(clave) {
+        return [...clave].reduce((hash, char) => (hash * 31 + char.charCodeAt(0)) % 1e9, 7); // Genera un número pseudo-único
     }
 
     // Cifrado personalizado
@@ -95,17 +95,22 @@
             return;
         }
 
-        const desplazamientoBase = [...clave].reduce((acc, char) => acc + (char.charCodeAt(0) - 97), 0) % 26;
+        const hashClave = generarHashClave(clave).toString(16); // Hash en formato hexadecimal
+        const desplazamientoBase = [...clave].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
         let textoCifrado = texto.split("").map((char, index) => {
-            if (char === " ") return " ";
-            const offset = clave.charCodeAt(index % clave.length) - 97 + desplazamientoBase;
+            if (char === " ") return " "; // No modifica espacios
+            const offset = (clave.charCodeAt(index % clave.length) + desplazamientoBase) % 26;
             return String.fromCharCode(((char.charCodeAt(0) - 97 + offset) % 26) + 97);
         }).join("");
 
-        textoCifrado = textoCifrado.split("").reverse().join(""); // Inversión
+        textoCifrado = textoCifrado.split("").reverse().join(""); // Inversión del texto
+        textoCifrado = hashClave + ":" + textoCifrado; // Incluye el hash de la clave al inicio
+
         document.getElementById("resultado-encriptar").textContent = textoCifrado;
     }
 
+    // Desencriptado personalizado con validación
     function desencriptar() {
         let texto = document.getElementById("textoDesencriptar").value;
 
@@ -120,17 +125,30 @@
             return;
         }
 
-        const desplazamientoBase = [...clave].reduce((acc, char) => acc + (char.charCodeAt(0) - 97), 0) % 26;
-        texto = texto.split("").reverse().join(""); // Reversión
+        const [hashClaveOriginal, textoCifrado] = texto.split(":");
+        if (!hashClaveOriginal || !textoCifrado) {
+            document.getElementById("resultado-desencriptar").textContent = "Texto cifrado inválido";
+            return;
+        }
 
-        let textoDescifrado = texto.split("").map((char, index) => {
-            if (char === " ") return " ";
-            const offset = clave.charCodeAt(index % clave.length) - 97 + desplazamientoBase;
+        const hashClave = generarHashClave(clave).toString(16);
+        if (hashClave !== hashClaveOriginal) {
+            document.getElementById("resultado-desencriptar").textContent = "Clave incorrecta, no se puede descifrar";
+            return;
+        }
+
+        const desplazamientoBase = [...clave].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const textoRevertido = textoCifrado.split("").reverse().join(""); // Reversión del texto
+
+        let textoDescifrado = textoRevertido.split("").map((char, index) => {
+            if (char === " ") return " "; // No modifica espacios
+            const offset = (clave.charCodeAt(index % clave.length) + desplazamientoBase) % 26;
             return String.fromCharCode(((char.charCodeAt(0) - 97 - offset + 26) % 26) + 97);
         }).join("");
 
         document.getElementById("resultado-desencriptar").textContent = textoDescifrado;
     }
+
 
     // AES
     function encriptarAES(texto, clave) {
