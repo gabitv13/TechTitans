@@ -38,7 +38,7 @@
             <p id="resultado-encriptar">Resultado de encriptación</p>
         </div>
         <div class="botones-accion">
-            <button onclick="copiarEncriptado()" class="btn-copiar">Copiar</button>
+            <button onclick="copiarTexto('resultado-encriptar')" class="btn-copiar">Copiar Encriptado</button>
         </div>
     </div>
 
@@ -61,7 +61,7 @@
             <p id="resultado-desencriptar">Resultado de desencriptación</p>
         </div>
         <div class="botones-accion">
-            <button onclick="copiarDesencriptado()" class="btn-copiar">Copiar</button>
+            <button onclick="copiarTexto('resultado-desencriptar')" class="btn-copiar">Copiar Desencriptado</button>
         </div>
     </div>
 </div>
@@ -70,173 +70,146 @@
 
 
 <script>
-        // Encriptar personalizado
-        function encriptar() {
-        const texto = document.getElementById("textoEncriptar").value;
+    // Función para ajustar clave al tamaño requerido
+    function ajustarClave(clave, tamaño) {
+        return clave.padEnd(tamaño, '0').substring(0, tamaño); // Extiende o recorta
+    }
+
+    // Cifrado personalizado
+    function encriptar() {
+        let texto = document.getElementById("textoEncriptar").value;
 
         if (texto.trim() === "") {
-        document.getElementById("resultado-encriptar").textContent = "Ingresa texto para encriptar";
-        return;
-    }
+            document.getElementById("resultado-encriptar").textContent = "Ingresa texto para encriptar";
+            return;
+        }
 
         if (!/^[a-z\s]+$/.test(texto)) {
-        document.getElementById("resultado-encriptar").textContent = "Solo se permiten letras minúsculas sin acentos";
-        return;
-    }
+            document.getElementById("resultado-encriptar").textContent = "Solo se permiten letras minúsculas sin acentos";
+            return;
+        }
 
-        const textoCifrado = texto
-        .replace(/e/g, "enter")
-        .replace(/i/g, "imes")
-        .replace(/a/g, "ai")
-        .replace(/o/g, "ober")
-        .replace(/u/g, "ufat");
+        const clave = prompt("Ingresa una clave de cifrado:");
+        if (!clave || !/^[a-z]+$/.test(clave)) {
+            document.getElementById("resultado-encriptar").textContent = "La clave debe contener solo letras minúsculas";
+            return;
+        }
 
+        const desplazamientoBase = [...clave].reduce((acc, char) => acc + (char.charCodeAt(0) - 97), 0) % 26;
+        let textoCifrado = texto.split("").map((char, index) => {
+            if (char === " ") return " ";
+            const offset = clave.charCodeAt(index % clave.length) - 97 + desplazamientoBase;
+            return String.fromCharCode(((char.charCodeAt(0) - 97 + offset) % 26) + 97);
+        }).join("");
+
+        textoCifrado = textoCifrado.split("").reverse().join(""); // Inversión
         document.getElementById("resultado-encriptar").textContent = textoCifrado;
     }
 
-        // Desencriptar personalizado
-        function desencriptar() {
-        const texto = document.getElementById("textoDesencriptar").value;
+    function desencriptar() {
+        let texto = document.getElementById("textoDesencriptar").value;
 
         if (texto.trim() === "") {
-        document.getElementById("resultado-desencriptar").textContent = "Ingresa texto para desencriptar";
-        return;
-    }
+            document.getElementById("resultado-desencriptar").textContent = "Ingresa texto para desencriptar";
+            return;
+        }
 
-        const textoDescifrado = texto
-        .replace(/enter/g, "e")
-        .replace(/imes/g, "i")
-        .replace(/ai/g, "a")
-        .replace(/ober/g, "o")
-        .replace(/ufat/g, "u");
+        const clave = prompt("Ingresa la clave de descifrado:");
+        if (!clave || !/^[a-z]+$/.test(clave)) {
+            document.getElementById("resultado-desencriptar").textContent = "La clave debe contener solo letras minúsculas";
+            return;
+        }
+
+        const desplazamientoBase = [...clave].reduce((acc, char) => acc + (char.charCodeAt(0) - 97), 0) % 26;
+        texto = texto.split("").reverse().join(""); // Reversión
+
+        let textoDescifrado = texto.split("").map((char, index) => {
+            if (char === " ") return " ";
+            const offset = clave.charCodeAt(index % clave.length) - 97 + desplazamientoBase;
+            return String.fromCharCode(((char.charCodeAt(0) - 97 - offset + 26) % 26) + 97);
+        }).join("");
 
         document.getElementById("resultado-desencriptar").textContent = textoDescifrado;
     }
 
-        function ajustarClave(clave, longitudRequerida) {
-            return CryptoJS.enc.Utf8.parse(
-                    clave.padEnd(longitudRequerida, "0").substring(0, longitudRequerida)
-            );
-        }
-
-
-        // Encriptar con AES
-        function encriptarAES(texto, clave) {
-        const claveUtf8 = CryptoJS.enc.Utf8.parse(clave);
-        const textoCifrado = CryptoJS.AES.encrypt(texto, claveUtf8, {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7,
-    }).toString();
-        return textoCifrado;
+    // AES
+    function encriptarAES(texto, clave) {
+        const claveAjustada = ajustarClave(clave, 16);
+        return CryptoJS.AES.encrypt(texto, claveAjustada).toString();
     }
 
-        function encriptarAES(texto, clave) {
-            const claveAjustada = ajustarClave(clave, 16); // AES-128 usa 16 bytes
-            const textoCifrado = CryptoJS.AES.encrypt(texto, claveAjustada, {
-                mode: CryptoJS.mode.ECB,
-                padding: CryptoJS.pad.Pkcs7,
-            }).toString();
-            return textoCifrado; // Devuelve en Base64
+    function desencriptarAES(textoCifrado, clave) {
+        const claveAjustada = ajustarClave(clave, 16);
+        const bytes = CryptoJS.AES.decrypt(textoCifrado, claveAjustada);
+        return bytes.toString(CryptoJS.enc.Utf8);
+    }
+
+    // DES
+    function encriptarDES(texto, clave) {
+        const claveAjustada = ajustarClave(clave, 8);
+        return CryptoJS.DES.encrypt(texto, claveAjustada).toString();
+    }
+
+    function desencriptarDES(textoCifrado, clave) {
+        const claveAjustada = ajustarClave(clave, 8);
+        const bytes = CryptoJS.DES.decrypt(textoCifrado, claveAjustada);
+        return bytes.toString(CryptoJS.enc.Utf8);
+    }
+
+    // Copiar texto
+    function copiarTexto(id) {
+        const texto = document.getElementById(id).textContent;
+        if (texto) {
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("Texto copiado al portapapeles");
+            }).catch(err => {
+                console.error("Error al copiar:", err);
+            });
+        } else {
+            alert("No hay texto para copiar");
         }
+    }
 
-        function desencriptarAES(textoCifrado, clave) {
-            try {
-                const claveAjustada = ajustarClave(clave, 16); // AES-128 usa 16 bytes
-                const bytes = CryptoJS.AES.decrypt(textoCifrado, claveAjustada, {
-                    mode: CryptoJS.mode.ECB,
-                    padding: CryptoJS.pad.Pkcs7,
-                });
-                const textoDescifrado = bytes.toString(CryptoJS.enc.Utf8);
-                if (!textoDescifrado) throw new Error("Texto no válido");
-                return textoDescifrado;
-            } catch (error) {
-                console.error("Error en desencriptar AES:", error);
-                return null;
-            }
-        }
+    // Asignar eventos
+    document.getElementById("btn-personalizado-encriptar").addEventListener("click", encriptar);
+    document.getElementById("btn-personalizado-desencriptar").addEventListener("click", desencriptar);
 
-
-        function encriptarDES(texto, clave) {
-            const claveAjustada = ajustarClave(clave, 8); // DES usa 8 bytes
-            const textoCifrado = CryptoJS.DES.encrypt(texto, claveAjustada, {
-                mode: CryptoJS.mode.ECB,
-                padding: CryptoJS.pad.Pkcs7,
-            }).toString();
-            return textoCifrado; // Devuelve en Base64
-        }
-
-        function desencriptarDES(textoCifrado, clave) {
-            try {
-                const claveAjustada = ajustarClave(clave, 8); // DES usa 8 bytes
-                const bytes = CryptoJS.DES.decrypt(textoCifrado, claveAjustada, {
-                    mode: CryptoJS.mode.ECB,
-                    padding: CryptoJS.pad.Pkcs7,
-                });
-                const textoDescifrado = bytes.toString(CryptoJS.enc.Utf8);
-                if (!textoDescifrado) throw new Error("Texto no válido");
-                return textoDescifrado;
-            } catch (error) {
-                console.error("Error en desencriptar DES:", error);
-                return null;
-            }
-        }
-
-
-        // Manejo de eventos para botones
-        document.getElementById("btn-personalizado-encriptar").addEventListener("click", encriptar);
-        document.getElementById("btn-personalizado-desencriptar").addEventListener("click", desencriptar);
-
-        document.getElementById("btn-aes-encriptar").addEventListener("click", () => {
+    document.getElementById("btn-aes-encriptar").addEventListener("click", () => {
         const texto = document.getElementById("textoEncriptar").value;
         const clave = prompt("Introduce la clave para AES:");
         if (texto.trim() && clave.trim()) {
-        const resultado = encriptarAES(texto, clave);
-        document.getElementById("resultado-encriptar").textContent = resultado;
-    } else {
-        alert("Texto y clave no pueden estar vacíos.");
-    }
+            const resultado = encriptarAES(texto, clave);
+            document.getElementById("resultado-encriptar").textContent = resultado;
+        }
     });
 
-        document.getElementById("btn-aes-desencriptar").addEventListener("click", () => {
-            const textoCifrado = document.getElementById("textoDesencriptar").value;
-            const clave = prompt("Introduce la clave para AES:");
-            if (textoCifrado.trim() && clave.trim()) {
-                const resultado = desencriptarAES(textoCifrado, clave);
-                if (resultado) {
-                    document.getElementById("resultado-desencriptar").textContent = resultado;
-                } else {
-                    document.getElementById("resultado-desencriptar").textContent = "Error al desencriptar: clave incorrecta o texto inválido.";
-                }
-            } else {
-                document.getElementById("resultado-desencriptar").textContent = "Texto cifrado y clave no pueden estar vacíos.";
-            }
-        });
+    document.getElementById("btn-aes-desencriptar").addEventListener("click", () => {
+        const texto = document.getElementById("textoDesencriptar").value;
+        const clave = prompt("Introduce la clave para AES:");
+        if (texto.trim() && clave.trim()) {
+            const resultado = desencriptarAES(texto, clave);
+            document.getElementById("resultado-desencriptar").textContent = resultado || "Error al desencriptar";
+        }
+    });
 
-        document.getElementById("btn-des-encriptar").addEventListener("click", () => {
+    document.getElementById("btn-des-encriptar").addEventListener("click", () => {
         const texto = document.getElementById("textoEncriptar").value;
         const clave = prompt("Introduce la clave para DES:");
         if (texto.trim() && clave.trim()) {
-        const resultado = encriptarDES(texto, clave);
-        document.getElementById("resultado-encriptar").textContent = resultado;
-    } else {
-        alert("Texto y clave no pueden estar vacíos.");
-    }
+            const resultado = encriptarDES(texto, clave);
+            document.getElementById("resultado-encriptar").textContent = resultado;
+        }
     });
 
-        document.getElementById("btn-des-desencriptar").addEventListener("click", () => {
-            const textoCifrado = document.getElementById("textoDesencriptar").value;
-            const clave = prompt("Introduce la clave para DES:");
-            if (textoCifrado.trim() && clave.trim()) {
-                const resultado = desencriptarDES(textoCifrado, clave);
-                if (resultado) {
-                    document.getElementById("resultado-desencriptar").textContent = resultado;
-                } else {
-                    document.getElementById("resultado-desencriptar").textContent = "Error al desencriptar: clave incorrecta o texto inválido.";
-                }
-            } else {
-                document.getElementById("resultado-desencriptar").textContent = "Texto cifrado y clave no pueden estar vacíos.";
-            }
-        });
+    document.getElementById("btn-des-desencriptar").addEventListener("click", () => {
+        const texto = document.getElementById("textoDesencriptar").value;
+        const clave = prompt("Introduce la clave para DES:");
+        if (texto.trim() && clave.trim()) {
+            const resultado = desencriptarDES(texto, clave);
+            document.getElementById("resultado-desencriptar").textContent = resultado || "Error al desencriptar";
+        }
+    });
+
 </script>
 </body>
 </html>
