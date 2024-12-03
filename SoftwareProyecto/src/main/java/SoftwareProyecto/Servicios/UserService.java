@@ -1,5 +1,6 @@
 package SoftwareProyecto.Servicios;
 
+
 import SoftwareProyecto.Clases.User;
 import SoftwareProyecto.Repositorios.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 
 @Service
 public class UserService {
@@ -19,7 +23,8 @@ public class UserService {
     }
 
     public User createUser(String username, String password) {;
-        User user = new User(username, password);
+        String sanitizedUsername = Jsoup.clean(username, Safelist.basic());
+        User user = new User(sanitizedUsername, password);
         return userRepository.save(user);
     }
 

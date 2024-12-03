@@ -4,6 +4,8 @@ import SoftwareProyecto.Clases.User;
 import SoftwareProyecto.Servicios.PasswordService;
 import SoftwareProyecto.Servicios.UserService;
 import SoftwareProyecto.Servicios.UserSession;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +29,9 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        Optional<User> userOptional = userService.findByUsername(username);
+        String sanitizedUsername = Jsoup.clean(username, Safelist.basic());
+
+        Optional<User> userOptional = userService.findByUsername(sanitizedUsername);
 
         if (userOptional.isPresent() && userService.checkPassword(userOptional.get(), password)) {
             userSession.login(userOptional.get());
@@ -40,14 +44,15 @@ public class UserController {
 
     @PostMapping("/register")
     public String registerUser(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
-        Optional<User> existingUser = userService.findByUsername(username);
+        String sanitizedUsername = Jsoup.clean(username, Safelist.basic());
+        Optional<User> existingUser = userService.findByUsername(sanitizedUsername);
         if (existingUser.isPresent()) {
             model.addAttribute("errorMessage", "El usuario ya existe.");
             return "safePassword";
         }
 
         // Crear y guardar un nuevo usuario con el nombre y la contraseña proporcionados
-        User newUser = userService.createUser(username, password);
+        User newUser = userService.createUser(sanitizedUsername, password);
         userSession.login(newUser);  // Inicia sesión automáticamente tras el registro
         return "redirect:/passwords";
     }
