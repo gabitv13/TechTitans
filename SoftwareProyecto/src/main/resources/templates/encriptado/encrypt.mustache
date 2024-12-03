@@ -275,8 +275,8 @@
 
     function desencriptarDES(textoCifrado, clave) {
         try {
-            const claveFormateada = CryptoJS.enc.Utf8.parse(clave);
-            const bytes = CryptoJS.DES.decrypt(textoCifrado, claveFormateada, {
+            const claveAjustada = ajustarClave(clave, 8); // Usa la misma función de ajuste que en encriptación
+            const bytes = CryptoJS.DES.decrypt(textoCifrado, claveAjustada, {
                 mode: CryptoJS.mode.ECB,
                 padding: CryptoJS.pad.Pkcs7,
             });
