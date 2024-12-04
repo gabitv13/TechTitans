@@ -29,23 +29,26 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        String sanitizedUsername = Jsoup.clean(username, Safelist.basic());
+        // Use a more strict Safelist that strips all HTML tags
+        String sanitizedUsername = Jsoup.clean(username, Safelist.none());
 
         Optional<User> userOptional = userService.findByUsername(sanitizedUsername);
 
         if (userOptional.isPresent() && userService.checkPassword(userOptional.get(), password)) {
             userSession.login(userOptional.get());
-            return "redirect:/passwords"; // Redirige a la página de passwords si el login es exitoso
+            return "redirect:/passwords";
         } else {
             model.addAttribute("ErrorMessage", "Nombre de usuario o contraseña incorrecta.");
-            return "login"; // Redirige de nuevo al login si falla la autenticación
+            return "login";
         }
     }
 
     @PostMapping("/register")
     public String registerUser(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
-        String sanitizedUsername = Jsoup.clean(username, Safelist.basic());
+        // Use Safelist.none() to completely strip HTML tags
+        String sanitizedUsername = Jsoup.clean(username, Safelist.none());
         Optional<User> existingUser = userService.findByUsername(sanitizedUsername);
+
         if (existingUser.isPresent()) {
             model.addAttribute("errorMessage", "El usuario ya existe.");
             return "safePassword";
@@ -53,7 +56,7 @@ public class UserController {
 
         // Crear y guardar un nuevo usuario con el nombre y la contraseña proporcionados
         User newUser = userService.createUser(sanitizedUsername, password);
-        userSession.login(newUser);  // Inicia sesión automáticamente tras el registro
+        userSession.login(newUser);
         return "redirect:/passwords";
     }
 

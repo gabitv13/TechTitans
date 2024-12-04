@@ -1,6 +1,5 @@
 package SoftwareProyecto.Servicios;
 
-
 import SoftwareProyecto.Clases.User;
 import SoftwareProyecto.Repositorios.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,9 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public User createUser(String username, String password) {;
-        String sanitizedUsername = Jsoup.clean(username, Safelist.basic());
+    public User createUser(String username, String password) {
+        // Use Safelist.none() to completely strip HTML tags
+        String sanitizedUsername = Jsoup.clean(username, Safelist.none());
         User user = new User(sanitizedUsername, password);
         return userRepository.save(user);
     }
